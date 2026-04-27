@@ -1,16 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <p>Le catalogue des produits</p>
-    <ul>
+{% extends 'base/base.html' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1>Nos Produits</h1>
+
+    <div class="row">
         {% for product in products %}
-            <p>{{product.name }} - {{ product.price }}</p>
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 py-3">
+            
+            <div class="card bg-light my-3 p-3 rounded" style="height: 100%;">
+                
+                <a href="{% url 'product_detail' product.id %}">
+                     {% if product.image %}
+        <img src="{{ product.image.url }}" class="card-img" alt="{{ product.name }}">
+    {% else %}
+        <img src="/static/images/default.png" class="card-img" alt="default">
+    {% endif %}
+                </a>
+
+                <div class="card-body">
+                    
+                    <div class="card-title" style="height: 60px;">
+                        <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+                            <strong>{{ product.name }}</strong>
+                        </a>
+                    </div>
+
+                    <div class="card-text">
+                        <h3>{{ product.price }} MAD</h3>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}
