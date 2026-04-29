@@ -1,0 +1,102 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container">
+
+<a href="{% url 'product_list' %}" class="btn btn-light my-3">Retour</a>
+    <div class="row">
+
+        <!-- IMAGE -->
+        <div class="col-md-6">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+            {% else %}
+                <img src="/static/images/default.png" class="img-fluid rounded" alt="default">
+            {% endif %}
+        </div>
+
+        <!-- DETAILS -->
+        <div class="col-md-3">
+            <div class="list-group">
+                
+                <div class="list-group-item">
+                    <h3>{{ product.name }}</h3>
+                </div>
+
+                <div class="list-group-item">
+                    {{ product.description }}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PRIX + PANIER -->
+        <div class="col-md-3">
+            <div class="card">
+                
+                <div class="list-group">
+
+                    <!-- PRIX -->
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col">Price:</div>
+                            <div class="col">
+                                <strong>{{ product.price }} MAD</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STOCK -->
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col">Statut:</div>
+                            <div class="col">
+                                <strong>
+                                    {% if product.stock > 0 %}
+                                        En stock
+                                    {% else %}
+                                        En rupture
+                                    {% endif %}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FORMULAIRE PANIER -->
+                    <form method="post" action="{% url 'add_cart' product.id %}">
+                        {% csrf_token %}
+
+                        <div class="list-group-item">
+                            <div class="row">
+                                <div class="col">Quantité:</div>
+                                <div class="col">
+                                    <input type="number" name="quantity" min="1" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if request.GET.error %}
+                        <div class="list-group-item">
+                            <div class="alert alert-danger">
+                                {{ request.GET.error }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="list-group-item text-center">
+                            <button type="submit" class="btn btn-primary"
+                                {% if product.stock <= 0 %}disabled{% endif %}>
+                                Ajouter au panier
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
