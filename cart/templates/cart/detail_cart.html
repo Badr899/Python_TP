@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Mon panier</h2>
+
+    {% if cart.cartitem_set.all %}
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in cart.cartitem_set.all %}
+
+                <tr>
+
+                    <td>{{ item.product.name }}</td>
+
+                    <td>{{ item.quantity }}</td>
+
+                    <td>{{ item.product.price }} MAD</td>
+
+                    <td>
+                        {{ item.quantity }}
+                    </td>
+
+                    <td>
+                        <a href="{% url 'cartItem_delete' item.id %}"
+                           class="btn btn-danger">
+                            Supprimer
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <div class="alert alert-warning">
+            Votre panier est vide.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
